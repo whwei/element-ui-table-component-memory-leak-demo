@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!-- import CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-default/index.css">
+</head>
+<body>
+  <div id="app">
+    <router-view></router-view>
+  </div>
+</body>
+  <!-- import Vue before Element -->
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <!-- import JavaScript -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script>
+    function createData() {
+      var data = []
+      for (var i = 0; i < 5000; i++) {
+        data.push({ date: Date.now() })
+      }
+      return data
+    }
+    var td = createData()
+
+    var Page2 = {
+      template: `
+        <div>
+        <h1>Page 2</h1>
+        <el-table :data="data">
+        </el-table>
+        <!-- <ul> -->
+          <!-- <li v-for="item in data">{{item.name}}</li> -->
+        <!-- </ul> -->
+        </div>`,
+      data: function() {
+        return {
+          data: []
+        }
+      }
+    }
+
+    var Page1 = {
+      template: `
+        <div>
+          <h1>Page 1</h1>
+          <el-table
+            :data="tableData"
+            style="width: 100%">
+            <el-table-column
+              width="180">
+              <template scope="scope">
+                <button>{{scope.row.date}}</button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        `,
+      data: function() {
+        return {
+          tableData: td
+        }
+      }
+    }
+
+    var App = {
+      template: `
+        <div>
+          <button @click="home = !home">toggle</button>
+          <page1 v-if="home"></page1>
+          <page2 v-if="!home"></page2>
+        </div>
+        `,
+      data: function() {
+        return {
+          home: true
+        }
+      },
+      components: {
+        page1: Page1,
+        page2: Page2
+      }
+    }
+
+    var app = new Vue(App)
+    app.$mount('#app')
+
+  </script>
+</html>
